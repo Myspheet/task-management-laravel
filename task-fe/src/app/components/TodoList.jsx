@@ -6,10 +6,12 @@ import { selectAllTasks, getTasks } from "../store/taskSlice";
 import { useEffect } from "react";
 import Row from "./Row";
 import { userDetails } from "../constatns";
+import { useRouter } from "next/navigation";
 
 const TodoList = () => {
     const dispatch = useDispatch();
     const tasks = useSelector(selectAllTasks);
+    const router = useRouter();
 
     const cookies = useCookies();
     const user = JSON.parse(cookies.get(userDetails) ?? "{}");
@@ -20,6 +22,11 @@ const TodoList = () => {
     useEffect(() => {
         if (fetchTaskStatus === "idle") {
             dispatch(getTasks(user.accessToken));
+        }
+
+        if (error && error.includes("401")) {
+            cookies.remove(userDetails);
+            router.push("login");
         }
     }, [fetchTaskStatus]);
 

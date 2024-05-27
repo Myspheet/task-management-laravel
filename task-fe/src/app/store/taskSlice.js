@@ -23,20 +23,25 @@ export const taskSlice = createSlice({
         builder
             .addCase(getTasks.pending, (state, action) => {
                 state.status = "loading";
+                state.error = null;
             })
             .addCase(getTasks.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.tasks = action.payload ?? [];
+                state.error = null;
             })
             .addCase(getTasks.rejected, (state, action) => {
                 state.status = "failed";
+                console.log("action", action);
                 state.error = action.error.message;
             })
             .addCase(deleteTask.pending, (state, action) => {
                 state.status = "loading";
+                state.error = null;
             })
             .addCase(deleteTask.fulfilled, (state, action) => {
                 state.status = "idle";
+                state.error = null;
             })
             .addCase(deleteTask.rejected, (state, action) => {
                 state.status = "failed";
@@ -44,9 +49,11 @@ export const taskSlice = createSlice({
             })
             .addCase(addTask.pending, (state, action) => {
                 state.status = "loading";
+                state.error = null;
             })
             .addCase(addTask.fulfilled, (state, action) => {
                 state.status = "idle";
+                state.error = null;
             })
             .addCase(addTask.rejected, (state, action) => {
                 state.status = "failed";
@@ -54,9 +61,11 @@ export const taskSlice = createSlice({
             })
             .addCase(updateTask.pending, (state, action) => {
                 state.status = "loading";
+                state.error = null;
             })
             .addCase(updateTask.fulfilled, (state, action) => {
                 state.status = "idle";
+                state.error = null;
             })
             .addCase(updateTask.rejected, (state, action) => {
                 state.status = "failed";
@@ -64,9 +73,11 @@ export const taskSlice = createSlice({
             })
             .addCase(completeTask.pending, (state, action) => {
                 state.status = "loading";
+                state.error = null;
             })
             .addCase(completeTask.fulfilled, (state, action) => {
                 state.status = "idle";
+                state.error = null;
             })
             .addCase(completeTask.rejected, (state, action) => {
                 state.status = "failed";
@@ -82,17 +93,13 @@ export default taskSlice.reducer;
 export const getTasks = createAsyncThunk(
     "tasks/getTasks",
     async (accessToken) => {
-        try {
-            const response = await axios.get(`${config.baseUrl}/tasks`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    Accept: "application/json",
-                },
-            });
-            return response.data;
-        } catch (error) {
-            console.log(error);
-        }
+        const response = await axios.get(`${config.baseUrl}/tasks`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/json",
+            },
+        });
+        return response.data;
     }
 );
 
@@ -159,7 +166,6 @@ export const deleteTask = createAsyncThunk(
 export const addTask = createAsyncThunk(
     "tasks/addTask",
     async ({ title, description, due_date, accessToken }) => {
-        console.log(accessToken);
         const response = await axios.post(
             `${config.baseUrl}/tasks`,
             {

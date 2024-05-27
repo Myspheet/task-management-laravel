@@ -80,8 +80,11 @@ EOD;
         PDF::AddPage();
         PDF::writeHTML($html, true, false, true, false, '');
         header('Access-Control-Allow-Origin: *');
-        PDF::Output("$name.pdf");
+        $pdf = PDF::Output("$name.pdf");
 
-//        return response()->download("$name.pdf");
+           return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', "attachment; filename=$name.pdf");
+
     }
 }
