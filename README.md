@@ -17,3 +17,14 @@
 
 - php artisan test
 
+
+
+## How to use application
+- After Registering, you're redirected to the login page
+- Enter your details and click the login button
+- Add a task
+- To mark a task as completed click the check mark icon
+- To edit a task click the edit icon
+- To delete a task click the delete icon
+- To download your task list click the download button
+
